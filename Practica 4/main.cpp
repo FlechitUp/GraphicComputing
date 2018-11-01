@@ -1,5 +1,4 @@
 /////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////
 // OpenGL headers
 #include <GL/gl.h>
 #include <GL/glu.h>
@@ -22,9 +21,7 @@
 #include <string>
 #include <random>
 
-//#include "rgbpixmap.cpp"
 #include "RgbImage.h"
-//#include "Cycle.cpp"
 
 
 using namespace std;
@@ -39,7 +36,7 @@ double windowPosY = 30;
 double windowWidth = glutGet(GLenum GLUT_SCREEN_WIDTH)-30;
 double windowHeight = glutGet(GLenum GLUT_SCREEN_HEIGHT)-20;
 
-GLuint  texture[4];         // Storage For One Texture ( NEW )
+GLuint  texture[5];         // Storage For One Texture ( NEW )
 /*
 * Read a texture map from a BMP bitmap file.
 */
@@ -157,31 +154,6 @@ void Movenent();
 
 GLUquadricObj *cone, *base, *qsphere, *cylinder;
 
-
-void tableLeg(double thick, double len)
-{
-    glPushMatrix();
-    glTranslated(0, len/2, 0);
-    glScaled(thick, len, thick);
-    glutSolidCube(1.0);
-    glPopMatrix();
-}
-
-
-void buildingBlock()
-{
-
-    /// Solid Cube
-
-    glPushMatrix();
-        glTranslatef(0,0.25f,0);
-        glutSolidCube(0.55);
-    glPopMatrix();
-}
-
-
-
-
 void grass()
 {
 
@@ -192,19 +164,21 @@ void grass()
     float tam = 0.5;
 
     glPushMatrix();
-    glTranslated(0, legLen, 0);
-    glScaled(topWidth, topThick, topWidth);
-        glBindTexture(GL_TEXTURE_2D,texture[0]);
-            //glutSolidCube(1.0);
+        glTranslated( 0, legLen, 0);
+        glScaled( topWidth, topThick, topWidth);
+        glBindTexture( GL_TEXTURE_2D, texture[0]);
+
         glBegin(GL_QUADS);
             // Back Face
-            glTexCoord2f(30.0f, 0.0f); glVertex3f(-tam , -tam , -tam );
-            glTexCoord2f(30.0f, 30.0f); glVertex3f(-tam , -tam , tam );
-            glTexCoord2f(0.0f, 30.0f); glVertex3f( tam ,  -tam , tam );
+            glTexCoord2f(3.0f, 0.0f); glVertex3f(-tam , -tam , -tam );
+            glTexCoord2f(3.0f, 3.0f); glVertex3f(-tam , -tam , tam );
+            glTexCoord2f(0.0f, 3.0f); glVertex3f( tam ,  -tam , tam );
             glTexCoord2f(0.0f, 0.0f); glVertex3f( tam , -tam , -tam );
         glEnd();
+
+        glDisable(GL_TEXTURE_2D);
     glPopMatrix();
-    glDisable(GL_TEXTURE_2D);
+
 
 }
 
@@ -279,23 +253,53 @@ void building()
                 glTexCoord2f(0.5f, 0.5f); glVertex3f( -myTam, hTriangle ,0);///2L
                 glTexCoord2f(0.0f, 1.0f); glVertex3f( -myTam,  myTam,  -myTam);///B
             glEnd();
-            //roof();
+
+            //Roof;
             glBindTexture(GL_TEXTURE_2D, texture[3]);
             glBegin(GL_QUADS);
-
+                //Front roof
                 glTexCoord2f(1.0f, 1.0f); glVertex3f( -myTam, myTam,  myTam);  ///A
                 glTexCoord2f(0.0f, 1.0f); glVertex3f(  myTam, myTam,  myTam);  ///3
                 glTexCoord2f(0.0f, 0.26f); glVertex3f(  myTam, hTriangle, 0.0f); ///2R
                 glTexCoord2f(1.0f, 0.26f); glVertex3f( -myTam, hTriangle, 0.0f); ///2L
-
+                //Back roof
                 glTexCoord2f(1.0f, 1.0f); glVertex3f( myTam,  myTam,  -myTam);  ///1
                 glTexCoord2f(0.0f, 1.0f); glVertex3f( -myTam,  myTam, -myTam);  ///B
                 glTexCoord2f(0.0f, 0.26f); glVertex3f(-myTam, hTriangle ,0);     ///2L
                 glTexCoord2f(1.0f, 0.26f); glVertex3f( myTam, hTriangle, 0.0f);  ///2R
             glEnd();
 
+    glPopMatrix();
 
-        glDisable(GL_TEXTURE_2D);
+}
+void tree()
+{
+    float myTam = 0.3;
+    float myTam2 = 0.3;
+    glPushMatrix();
+    glBindTexture(GL_TEXTURE_2D, texture[4]);
+    glPushMatrix();
+        //glTranslated(0.4, 0.02, 0.4);
+         glBegin(GL_QUADS);
+            ///paralelo a right wall
+            glTexCoord2f(0.0f, 0.0f); glVertex3f( myTam, -myTam, -myTam);///1
+            glTexCoord2f(0.0f, 1.0f); glVertex3f( myTam,  myTam, -myTam);///2
+            glTexCoord2f(1.0f, 1.0f); glVertex3f( myTam,  myTam,  myTam);///3
+            glTexCoord2f(1.0f, 0.0f); glVertex3f( myTam, -myTam,  myTam);///4
+
+        glEnd();
+    glPopMatrix();
+
+    glPushMatrix();
+        glTranslated(myTam, 0, 0);
+        ///paralelo a door
+        glBegin(GL_QUADS);
+            glTexCoord2f(1.0f, 0.0f); glVertex3f( -myTam2, -myTam2, 0);
+            glTexCoord2f(0.0f, 0.0f); glVertex3f(  myTam2, -myTam2, 0);
+            glTexCoord2f(0.0f, 1.0f); glVertex3f(  myTam2,  myTam2, 0);
+            glTexCoord2f(1.0f, 1.0f); glVertex3f( -myTam2,  myTam2, 0);
+        glEnd();
+    glPopMatrix();
     glPopMatrix();
 
 }
@@ -380,6 +384,12 @@ void display(void)
         building();
     glPopMatrix();
 
+    ///Tree
+    glPushMatrix();
+        glTranslated(0.4, 0.25, 0.4);
+        tree();
+    glPopMatrix();
+
 
     /// Grass
     glPushMatrix();
@@ -411,6 +421,8 @@ void display(void)
         //twofinalWindow();
         theDoor();
     glPopMatrix();
+
+    glDisable(GL_TEXTURE_2D);
 
     glFlush();
 
@@ -446,9 +458,9 @@ void CalculationX_Y_Z()
     EyePosition_X = ProRadious * cos(InitialTheta1);
     EyePosition_Z = ProRadious * sin(InitialTheta1);
 
-    printf("EyePosition_X: %f\n",EyePosition_X);
+    /*printf("EyePosition_X: %f\n",EyePosition_X);
     printf("EyePosition_Y: %f\n",EyePosition_Y);
-    printf("EyePosition_Z: %f\n\n",EyePosition_Z);
+    printf("EyePosition_Z: %f\n\n",EyePosition_Z);*/
 }
 
 
@@ -555,10 +567,11 @@ void KeybordFunction( unsigned char key, int x, int y )
 }
 
 
-char* filename[] = {"C:/Users/USUARIO/Documents/2018/02/Grafica/casawee2/grass3.bmp",
+char* filename[] = {"C:/Users/USUARIO/Documents/2018/02/Grafica/casawee2/Grass01.bmp",
                     "C:/Users/USUARIO/Documents/2018/02/Grafica/casaWe/wall.bmp",
                     "C:/Users/USUARIO/Documents/2018/02/Grafica/casaWee2/door.bmp",
-                    "C:/Users/USUARIO/Documents/2018/02/Grafica/casawee2/roof2.bmp"};
+                    "C:/Users/USUARIO/Documents/2018/02/Grafica/casawee2/roof2.bmp",
+                    "C:/Users/USUARIO/Documents/2018/02/Grafica/casawee2/grass.bmp"};
 
 
 int main(int argc, char **argv)
@@ -573,7 +586,7 @@ int main(int argc, char **argv)
 
     glutIdleFunc(RepeatDisplay);
 
-    for ( int  i=0;i<4;i++)
+    for ( int  i=0;i<5;i++)
    {
       loadTextureFromFile(filename[i],i);
    }
