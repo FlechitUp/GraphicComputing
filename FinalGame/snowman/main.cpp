@@ -3,6 +3,7 @@
 #include <GL/glu.h>
 #include <GL/glut.h>
 #include <iostream>
+#include <iomanip>
 #include "RgbImage.h"
 #include "game.h"
 
@@ -34,7 +35,7 @@ int position;
 void init()
 {
     glEnable(GL_TEXTURE_2D);
-	glutFullScreen();
+	//glutFullScreen();
 	float lpos[]= {1.0,3.0,4.0};
 	float lamb[]= {0.4,0.4,0.4,1.0};
 	float ldif[]= {1.0,1.0,1.0,1.0};
@@ -52,6 +53,8 @@ void init()
 
 int main(int argc, char **argv)
 {
+    srand(time(NULL));
+    cout<<fixed<<setprecision(3);
 	glutInit(&argc, argv);
 	glutInitDisplayMode(GLUT_RGBA | GLUT_DOUBLE | GLUT_DEPTH);
 

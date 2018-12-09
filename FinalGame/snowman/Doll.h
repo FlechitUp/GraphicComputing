@@ -24,10 +24,11 @@ class Doll
         short handDir;
         int proneHold;
         int shifting;
+        float mx, my, mz;
+        int lifes;
 
         Doll();
         vector<float> getPos();
-        void detectarColisiones();
         void jump();
         void down();
         void right();

@@ -19,6 +19,7 @@ public:
     float cy;
     float cz;
     float sz;
+    float mx, my, mz;
 
 public:
     Stone(float _cx, float _cy, float _cz, float _sz): cx(_cx), cy(_cy), cz(_cz), sz(_sz){}
@@ -51,10 +52,11 @@ class scene
         int iSecret2;
         float largoQuad;
         float square_size = 10.0f;
-        Many_Stones mStones;
+        //Many_Stones mStones;
+        vector<Stone> vec_stones;
         float max_roads = 50;
         scene();
-        void detectarColsiones();
+        //void detectarColsiones();
         void drawQuad(int posTexture=2);
         void createLine(int);
         void drawScene(float ,bool);

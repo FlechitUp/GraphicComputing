@@ -13,18 +13,26 @@ float aleatoriFloat()
 
 void Stone::draw()
 {
+    GLfloat matrix[16];
+
     glPushMatrix();
         glTranslatef(cx, 1.0f, cz);
+        glGetFloatv(GL_MODELVIEW_MATRIX,matrix);
         glutSolidSphere(1, 20, 20);   /// 1 es el tamano de la rocka
+        mx = matrix[3];
+        my = matrix[7];
+        mz = matrix[11];
+
+
     glPopMatrix();
 }
 
 vector<float> Stone::getPos()
 {
     vector<float> vecPos;
-    vecPos.push_back(cx);
-    vecPos.push_back(cy);
-    vecPos.push_back(cz);
+    vecPos.push_back(mx);
+    vecPos.push_back(my);
+    vecPos.push_back(mz);
     return vecPos;
 }
 
@@ -38,13 +46,13 @@ float Stone::getSize()
 Many_Stones::Many_Stones(float _square_size): square_size(_square_size)
 {
     lastz = 0;
-    for(int i = 0;i < 4;++i)   /// cantidad de piedras
+    /*for(int i = 0;i < 4;++i)   /// cantidad de piedras
     {
         if(rand()%100 < 10){  //10% probabilidad de que aparesca el camino
-            addStone(0.0f, 0.0f, (aleatoriFloat()*2) , 2.5f);
+            //addStone(0.0f, 0.0f, (aleatoriFloat()*2) , 2.5f);
         }
         lastz -= square_size;
-    }
+    }*/
 }
 
 void Many_Stones::draw(float doll_posz)
@@ -73,14 +81,21 @@ vector<Stone> Many_Stones::getAllStones()
     return this->vec_stones;
 }
 
-scene::scene():  mStones(square_size)
+scene::scene()//: //mStones(square_size)
 {
     //square_size = 10.0f;
     trackOffset = 0;
     srand (time(NULL));
-    iSecret = 0;
-    iSecret2 = 0;
+    iSecret = 4;
+    iSecret2 = 4;
     largoQuad = -20.0f;
+    vec_stones.push_back(Stone(-5, 0.0, float(rand() % 10 + 1)  , 2.5f) );
+    vec_stones.push_back(Stone( -2.5, 0.0, float(rand() % 10 + 1) , 2.5f) );
+    vec_stones.push_back(Stone( 0, 0.0, float(rand() % 10 + 1)  , 2.5f) );
+
+    vec_stones.push_back(Stone( -5, 0.0, float(rand() % 10 + 1)  , 2.5f) );
+    vec_stones.push_back(Stone(  -2.5, 0.0, float(rand() % 10 + 1)  , 2.5f) );
+    vec_stones.push_back(Stone( 0, 0.0, float(rand() % 10 + 1)  , 2.5f) );
     //ctor
 }
 
@@ -94,54 +109,37 @@ void scene::drawQuad(int posTexture){
     glEnd();
 }
 
-void scene::detectarColsiones()
-{
-    float dx = 0, dy = 0, dz =0;
-    for(Stone& st: mStones.getAllStones())
-    {
-        vector<float> stpos = st.getPos();
-        float sx = stpos[0], sy = stpos[1], sz = stpos[2];
-        float to_colision = 0.77f + st.getSize();
-        float distance_to_stone = sqrt(pow(sx-dx, 2.0f) + pow(sy-dy, 2.0f) + pow(sz-dz, 2.0f) );
-        if(distance_to_stone < to_colision)
-        {
-            cout << "Rocas" << distance_to_stone << endl;
-            //mostrarCirculo = true;
-            break;
-        }
-        //else
-            //mostrarCirculo = false;
-
-    }
-}
 
 void scene::createLine(int aleatori)
 {
-    if(aleatori == 1){
-        //No dibujar
+    if(aleatori == 0){
+        //No dibuja
         glTranslatef(-2.5, 0.0, 0.0 );
     }else {
         ///pista 1
         glTranslatef(-2.5, 0.0, 0.0 );
         drawQuad(2);
-        mStones.draw( (float(rand() % 10 + 1),0, float(rand() % 10 + 1) ) );
+
+        //vec_stones.back().draw();
+           //mStones.draw( (float(rand() % 10 + 1),0, float(rand() % 10 + 1) ) );
+        //mStones.addStone(float(rand() % 10 + 1),0, float(rand() % 10 + 1) , 2.5f);
     }
-    if(aleatori == 2){
+    if(aleatori == 1){
          //No dibujar
         glTranslatef(2.5, 0.0, 0.0 );    ///mover en X
     }else{
         /// pista 2
         glTranslatef(2.5, 0.0, 0.0 );    ///mover en X
         drawQuad(2);
-        mStones.draw( (float(rand() % 20 + 1),float(rand() % 4 + 1), float(rand() % 10 + 1) ) );
-    } if(aleatori == 3){
+
+    } if(aleatori == 2){
          //No dibujar
         glTranslatef(2.5, 0.0, 0.0 );   /// mover en
     }else{
         ///pista 3
         glTranslatef(2.5, 0.0, 0.0 );   /// mover en X
         drawQuad(2);
-        mStones.draw( (float(rand() % 20 + 1),float(rand() % 4 + 1), float(rand() % 10 + 1) ) );
+
     }
 }
 
@@ -155,11 +153,17 @@ void scene::drawScene(float offset, bool gameStarted)
 	}
 	if( trackOffset>(largoQuad*(-1)+15) ){
 		trackOffset=0.0;
-        iSecret = rand() % 10 + 1;
-        iSecret2 = rand() % 4 + 1;
+        iSecret = rand() % 10 ;
+        iSecret2 = rand() % 4 ;
+        //vec_stones.push_back(Stone(float(rand() % 10 + 1),0, float(rand() % 10 + 1) , 2.5f) );
 	}
 
+
 	glPushMatrix();
+        glColor3f(0.1,0.1,0.1);
+        //mStones.draw(0);
+        glColor3f(1.0f, 1.0f, 1.0f);
+
         glDisable(GL_LIGHTING);
         glTranslatef(0.0, 0.0, trackOffset);
         glTranslatef(offset, 0.0, 0.0);
@@ -171,8 +175,59 @@ void scene::drawScene(float offset, bool gameStarted)
         glTranslatef(-2.5, 0, largoQuad-15 );
         createLine(iSecret2);
 
+        if(iSecret2 == 0 )
+        {
+            vec_stones[1].draw();
+            vec_stones[2].draw();
+        }
+        else if(iSecret2 == 1 )
+        {
+            vec_stones[0].draw();
+            vec_stones[2].draw();
+        }
+        else if(iSecret2 == 2 )
+        {
+            vec_stones[0].draw();
+            vec_stones[1].draw();
+        }
+        else
+        {
+            vec_stones[0].draw();
+            vec_stones[1].draw();
+            vec_stones[2].draw();
+        }
+
+        glTranslatef(2.5, 0, 15-largoQuad );
+
+        /// para pista back
+        if(iSecret == 0 )
+        {
+            vec_stones[4].draw();
+            vec_stones[5].draw();
+        }
+        else if(iSecret == 1 )
+        {
+            vec_stones[3].draw();
+            vec_stones[5].draw();
+        }
+        else if(iSecret == 2 )
+        {
+            vec_stones[3].draw();
+            vec_stones[4].draw();
+        }
+        else
+        {
+            vec_stones[3].draw();
+            vec_stones[4].draw();
+            vec_stones[5].draw();
+        }
+         glTranslatef(2.5, 0, 15-largoQuad );
+
+
+
 	glEnable(GL_LIGHTING);
 	glPopMatrix();
+
 	//glDisable(GL_TEXTURE_2D);
 
 }

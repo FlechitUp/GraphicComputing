@@ -15,15 +15,14 @@ Doll::Doll()
 	proneHold = 0;
 	handAngle = 110;
     handDir = 1;
+    lifes = 3;
 }
 
-void Doll::detectarColisiones()
-{
-
-}
 
 void Doll::drawCharacter()
 {
+    GLfloat matrix[16];
+
     glDisable(GL_LIGHTING);
 	if(handDir==1 &&handAngle >50)
 		handAngle-=3;
@@ -34,6 +33,7 @@ void Doll::drawCharacter()
 	else if(handDir==1 && handAngle>=110)
 		handDir = 1;
 
+
 	glPushMatrix();
         glTranslatef(0.0, jumpOffset, -2.0);
         glRotatef(rotAngle, 0.0, 1.0, 0.0);
@@ -42,7 +42,17 @@ void Doll::drawCharacter()
         glColor3f(0.0f, 0.5f, 1.0f);
         glTranslatef(0.0f, 0.75f, 0.0f);
         glRotatef(-proneAngle, 1.0, 0.0, 0.0);
+        //glGetFloatv (GL_MODELVIEW_MATRIX, matrix);
+        //cout<<"   " << matrix[0]<< " , " << matrix[1]<< " , "<<matrix[2]<< " , " <<matrix[3]<< " , " <<endl;
+        //cout<<"   " << matrix[4]<< " , " << matrix[5]<< " , "<<matrix[5]<< " , " <<matrix[6]<< " , " <<endl;
+        //cout<<"   " << matrix[7]<< " , " << matrix[8]<< " , "<<matrix[9]<< " , " <<matrix[10]<< " , " <<endl;
+        //cout<<"   " << matrix[11]<< " , " << matrix[12]<< " , "<<matrix[13]<< " , " <<matrix[14]<< " , " <<endl;
         glutSolidSphere(0.77f,20, 20);
+
+         glGetFloatv(GL_MODELVIEW_MATRIX,matrix);
+        mx = matrix[3];
+        my = matrix[7];
+        mz = matrix[11];
 
 
         ///Arms
@@ -97,9 +107,9 @@ void Doll::drawCharacter()
 vector<float> Doll::getPos()
 {
     vector<float> vecPos;
-/*    vecPos.push_back(cx);
-    vecPos.push_back(cy);
-    vecPos.push_back(cz);*/
+    vecPos.push_back(mx);
+    vecPos.push_back(my);
+    vecPos.push_back(mz);
     return vecPos;
 }
 
