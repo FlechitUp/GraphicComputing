@@ -99,7 +99,7 @@ void reshape(int w, int h) 	/// 158
 void initCamera()
 {
 	glTranslatef(0.0, -2.0, -7.0);
-	glRotatef(20 , 1.0, 0.0, 0.0);
+	glRotatef(20.0f , 1.0, 0.0, 0.0);
 }
 
 void loadTextureFromFile(char *filename,int index)

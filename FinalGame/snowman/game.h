@@ -24,6 +24,7 @@ public:
 
     void startGame();
     //void timer(int value);
+    void detectarColsiones();
     void actions(char);
 };
 

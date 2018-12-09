@@ -4,6 +4,7 @@
 #define GLUT_DISABLE_ATEXIT_HACK
 #include <windows.h>
 #include <GL/glut.h>
+#include <math.h>
 #include <stdlib.h>     /* srand, rand */
 #include <time.h>       /* time */
 #include <iostream>
@@ -24,6 +25,7 @@ public:
     void draw();
     vector<float> getPos();
     float getSize();
+
 };
 
 class Many_Stones

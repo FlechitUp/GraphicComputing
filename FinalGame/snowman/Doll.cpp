@@ -44,6 +44,7 @@ void Doll::drawCharacter()
         glRotatef(-proneAngle, 1.0, 0.0, 0.0);
         glutSolidSphere(0.77f,20, 20);
 
+
         ///Arms
         glPushMatrix();
             ///cilindro izq
@@ -105,6 +106,7 @@ vector<float> Doll::getPos()
 
 void Doll::initCharacter()  		/// 55
 {
+    //cout<<"init";
 	if(rotAngle<180)
 		rotAngle+=2;
 	//if(rotAngle==180)
@@ -215,8 +217,14 @@ void Doll::right()  /// press d
     shiftAngle =0.0;
     shifting = 1;
 	position++;
-	if(position>=-1)
+    /*if (position> -1 and position!= 0)
         position=1;
+    else if (position > -1)
+        position = 0;*/
+	if (position>=-1)
+        position = 1;
+
+    cout<<"d Pos "<< position<<endl;
 }
 void Doll::left()   /// press 'a'
 {
@@ -225,4 +233,5 @@ void Doll::left()   /// press 'a'
 	position--;
 	if(position<-1)
         position=-1;
+    cout<<"a Pos "<< position<<endl;
 }

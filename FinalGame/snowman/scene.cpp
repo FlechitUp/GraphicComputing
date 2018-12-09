@@ -41,9 +41,7 @@ Many_Stones::Many_Stones(float _square_size): square_size(_square_size)
     for(int i = 0;i < 4;++i)   /// cantidad de piedras
     {
         if(rand()%100 < 10){  //10% probabilidad de que aparesca el camino
-            addStone(0.0f, 0.0f, (aleatoriFloat()*2
-
-                                  ) , 2.5f);
+            addStone(0.0f, 0.0f, (aleatoriFloat()*2) , 2.5f);
         }
         lastz -= square_size;
     }
@@ -98,7 +96,23 @@ void scene::drawQuad(int posTexture){
 
 void scene::detectarColsiones()
 {
+    float dx = 0, dy = 0, dz =0;
+    for(Stone& st: mStones.getAllStones())
+    {
+        vector<float> stpos = st.getPos();
+        float sx = stpos[0], sy = stpos[1], sz = stpos[2];
+        float to_colision = 0.77f + st.getSize();
+        float distance_to_stone = sqrt(pow(sx-dx, 2.0f) + pow(sy-dy, 2.0f) + pow(sz-dz, 2.0f) );
+        if(distance_to_stone < to_colision)
+        {
+            cout << "Rocas" << distance_to_stone << endl;
+            //mostrarCirculo = true;
+            break;
+        }
+        //else
+            //mostrarCirculo = false;
 
+    }
 }
 
 void scene::createLine(int aleatori)
